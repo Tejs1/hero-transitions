@@ -3,31 +3,75 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 214, 219, 220;
+	--background-end-rgb: 255, 255, 255;
+	--blur-height: 128px;
+	--card-blur-height: var(--blur-height, 100%);
+	--blur-value: 40px;
+	--card-blur-value: var(--blur-value, 25px);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+	color: rgb(var(--foreground-rgb));
+	background: linear-gradient(
+			to bottom,
+			transparent,
+			rgb(var(--background-end-rgb))
+		)
+		rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.text-balance {
+		text-wrap: balance;
+	}
+	.product-square {
+		--real-card-width: calc((100% - 0.75rem * (6 - 1)) / 6);
+		--real-card-height: 224px;
+		padding: 0px;
+		box-sizing: border-box;
+		flex-direction: column;
+		position: relative;
+		display: block;
+	}
+	.product {
+		--card-padding: 1rem;
+		transition: all 150ms ease-out;
+		height: var(--real-card-height);
+		min-width: var(--real-card-width);
+		user-select: none;
+		padding: var(--card-padding);
+		border: var(--card-border) solid var(--theme-border-color);
+		border-radius: var(--sl-border-radius-large);
+		box-shadow: var(--sl-shadow-small);
+		background-color: var(--common-background-color);
+		display: flex;
+		text-decoration: none;
+		overflow: hidden;
+		mix-blend-mode: multiply;
+	}
+	.product .gradient {
+		background-image: linear-gradient(#454545, #454545),
+			linear-gradient(transparent, transparent), url("/img/zoom.png");
+	}
+	.product .gradual-blur {
+		position: absolute;
+		inset: 0px;
+		--transform-scale: scale(1);
+		background-blend-mode: luminosity, overlay, normal;
+		background-repeat: no-repeat;
+		background-position: center top;
+		background-size: 100% 128px;
+		filter: blur(calc(80px / 2)) saturate(4) contrast(90%);
+		transform: scale(1.5) translate3d(0, 0, 0);
+	}
 }
